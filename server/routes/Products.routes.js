@@ -22,8 +22,8 @@ router.put('/Update-Product/:id', upload.array('images'), UpdateProductWithImage
 
 //====================Routes For Offer Banner====================
 
-router.post('/Create-Offer-Banner', upload.single('image'), CreateOfferBanner);
-router.put('/Update-Offer-Banner/:id', upload.single('image'), UpdateOfferBanner);
+router.post('/Create-Offer-Banner', upload.array('images'), CreateOfferBanner);
+router.put('/Update-Offer-Banner/:id', upload.array('image'), UpdateOfferBanner);
 router.delete('/Delete-Offer-Banner/:id', DeleteOfferBanner);
 router.get('/Get-All-Active-Banners', GetAllActiveBanners);
 router.delete('/Delete-All-Banners', DeleteAllBanners);
@@ -37,5 +37,12 @@ router.post('/vouchers/create-vouchers', createVoucher)
 router.put('/vouchers/activateVoucher/:id', activateVoucher)
 router.put('/vouchers/deactivateVoucher/:id', deactivateVoucher)
 router.delete('/vouchers/deleteVoucher/:id', deleteVoucher)
+
+
+
+
+
+
+
 
 module.exports = router;

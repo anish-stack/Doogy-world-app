@@ -97,7 +97,7 @@ exports.GetAllProducts = CatchAsync(async (req, res) => {
 
 exports.GetOnlyHaveProductsWhichIsNotOutStock = CatchAsync(async (req, res) => {
     try {
-        const products = await Product.find({ inStock:  true });
+        const products = await Product.find({ inStock: true });
         if (products.length === 0) {
             return res.status(403).json({
                 success: false,

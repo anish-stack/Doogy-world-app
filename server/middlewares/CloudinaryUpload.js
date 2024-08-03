@@ -48,6 +48,7 @@ const uploadImage = async (file, res) => {
 const uploadSingleImage = async (req, res, next) => {
     try {
         const file = req.file;
+        console.log(file)
         if (!file) {
             return ApiResponse.error(res, "No file provided", 400);
         }

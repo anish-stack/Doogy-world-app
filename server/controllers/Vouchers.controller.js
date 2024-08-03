@@ -3,12 +3,11 @@ const Voucher = require('../models/Vouchers.model');  // Adjust the path as need
 // Create a new voucher
 exports.createVoucher = async (req, res) => {
     try {
-        console.log("Hote")
-        const { CouponeCode, HowMuchPercentageof, Active } = req.body;
+        const { CouponCode, HowMuchPercentageOf, Active } = req.body;
 
         const newVoucher = new Voucher({
-            CouponeCode,
-            HowMuchPercentageof,
+            CouponCode,
+            HowMuchPercentageOf,
             Active
         });
 
@@ -21,7 +20,7 @@ exports.createVoucher = async (req, res) => {
         // Handle duplicate key error
         if (error.code === 11000 && error.keyPattern && error.keyValue) {
             const duplicateKey = Object.keys(error.keyPattern)[0];
-            const duplicateValue = error.keyValue[duplicateKey];
+            const duplicateValue = error.keyValue[duplicateKey] || "unknown";
             return res.status(400).json({
                 success: false,
                 error: `Coupon code '${duplicateValue}' already exists. Please use a different coupon code.`
@@ -35,24 +34,24 @@ exports.createVoucher = async (req, res) => {
     }
 };
 
-exports.getAllVouchers = async (req,res)=>{
+exports.getAllVouchers = async (req, res) => {
     try {
         const AllVouchers = await Voucher.find()
-        if(AllVouchers.length === 0){
+        if (AllVouchers.length === 0) {
             return res.status(403).json({
-                success:false,
-                msg:"No Vouchers"
+                success: false,
+                msg: "No Vouchers"
             })
         }
         res.status(200).json({
-            success:true,
-            data:AllVouchers,
-            msg:" Vouchers Find"
+            success: true,
+            data: AllVouchers,
+            msg: " Vouchers Find"
         })
     } catch (error) {
         res.status(501).json({
-            success:true,
-            msg:"Internal Server Error Vouchers Find"
+            success: true,
+            msg: "Internal Server Error Vouchers Find"
         })
         console.log(error)
     }
@@ -61,12 +60,12 @@ exports.getAllVouchers = async (req,res)=>{
 exports.updateVoucher = async (req, res) => {
     try {
         const { id } = req.params;
-        const { CouponeCode, HowMuchPercentageof, Active } = req.body;
+        const { CouponCode, HowMuchPercentageOf, Active } = req.body;
 
-        const updatedVoucher = await Voucher.findByIdAndUpdate(id, { 
-            CouponeCode, 
-            HowMuchPercentageof, 
-            Active 
+        const updatedVoucher = await Voucher.findByIdAndUpdate(id, {
+            CouponCode,
+            HowMuchPercentageOf,
+            Active
         }, { new: true });
 
         if (!updatedVoucher) {
@@ -173,9 +172,9 @@ exports.deactivateVoucher = async (req, res) => {
 // Apply a voucher
 exports.applyVoucher = async (req, res) => {
     try {
-        const { CouponeCode, orderTotal } = req.body;
+        const { CouponCode, orderTotal } = req.body;
 
-        const voucher = await Voucher.findOne({ CouponeCode });
+        const voucher = await Voucher.findOne({ CouponCode });
 
         if (!voucher) {
             return res.status(404).json({

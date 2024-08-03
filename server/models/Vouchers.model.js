@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
 const VoucherSchema = new mongoose.Schema({
-    CouponeCode: {
+    CouponCode: {
         type: String,
         required: true,
         unique: true,
         trim: true
     },
-    HowMuchPercentageof: {
+    HowMuchPercentageOf: {
         type: Number,
         required: true,
         min: 0,
@@ -20,14 +20,14 @@ const VoucherSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Index to ensure unique coupon codes
-VoucherSchema.index({ CouponeCode: 1 }, { unique: true });
+VoucherSchema.index({ CouponCode: 1 }, { unique: true });
 
 // Method to apply voucher
 VoucherSchema.methods.applyVoucher = function(orderTotal) {
     if (!this.Active) {
         throw new Error('Voucher is not active');
     }
-    const discountAmount = (orderTotal * this.HowMuchPercentageof) / 100;
+    const discountAmount = (orderTotal * this.HowMuchPercentageOf) / 100;
     return orderTotal - discountAmount;
 };
 

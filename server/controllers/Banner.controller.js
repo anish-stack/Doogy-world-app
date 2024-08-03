@@ -1,14 +1,14 @@
 const OffersBanner = require('../models/OffersBanner.model');
-const { uploadSingleImage } = require('../middlewares/CloudinaryUpload');
+const {  uploadImage } = require('../middlewares/CloudinaryUpload');
 const CatchAsync = require('../middlewares/CatchAsync');
 const ApiResponse = require('../utils/ApiResponse');
 const Cloudinary = require('cloudinary').v2;
 // Create Offer Banner
 exports.CreateOfferBanner = CatchAsync(async (req, res) => {
     try {
-        const imageFile = req.file;
-        if (!imageFile) {
-            return ApiResponse.error(res, "Please upload an image", 400);
+        const imageFiles = req.files;
+        if (!imageFiles || imageFiles.length === 0) {
+            return ApiResponse.error(res, "Please upload at least one image", 400);
         }
 
         const { RedirectAt } = req.body;
@@ -16,14 +16,17 @@ exports.CreateOfferBanner = CatchAsync(async (req, res) => {
             return ApiResponse.error(res, "Please provide a redirect URL", 400);
         }
 
-        // Upload image to Cloudinary
-        const imageResult = await uploadSingleImage(imageFile);
+        // Handle multiple image uploads
+        const imageUploadPromises = imageFiles.map(file => uploadImage(file));
+        const imageResults = await Promise.all(imageUploadPromises);
+        console.log(imageResults)
+        const imageUrls = imageResults.map(result => ({
+            url: result.ImageUrl, 
+            PublicId: result.PublicId
+        }));
 
         const newBanner = new OffersBanner({
-            Image: {
-                url: imageResult.url,
-                PublicId: imageResult.public_id
-            },
+            Image: imageUrls,
             RedirectAt
         });
 
@@ -34,28 +37,35 @@ exports.CreateOfferBanner = CatchAsync(async (req, res) => {
         return ApiResponse.error(res, "Failed to create banner", 500, error);
     }
 });
-
 // Update Offer Banner
 exports.UpdateOfferBanner = CatchAsync(async (req, res) => {
     try {
         const { id } = req.params;
         const { RedirectAt } = req.body;
-        const imageFile = req.file;
+        const imageFiles = req.files;
 
+        // Find the existing banner
         const banner = await OffersBanner.findById(id);
         if (!banner) {
             return ApiResponse.error(res, "Banner not found", 404);
         }
 
         // Update image if provided
-        if (imageFile) {
-            // Delete old image from Cloudinary
-            await cloudinary.v2.uploader.destroy(banner.Image.PublicId);
+        if (imageFiles && imageFiles.length > 0) {
+            // Delete old images from Cloudinary
+            await Promise.all(banner.Image.map(image => Cloudinary.uploader.destroy(image.PublicId)));
 
-            // Upload new image to Cloudinary
-            const imageResult = await uploadSingleImage(imageFile);
-            banner.Image.url = imageResult.url;
-            banner.Image.PublicId = imageResult.public_id;
+            // Upload new images to Cloudinary
+            const imageUploadPromises = imageFiles.map(file => uploadImage(file));
+            const imageResults = await Promise.all(imageUploadPromises);
+
+            // Transform image results to match the schema format
+            const newImages = imageResults.map(result => ({
+                url: result.ImageUrl, // Adjust field names if necessary
+                PublicId: result.PublicId
+            }));
+
+            banner.Image = newImages; // Update the image field with new images
         }
 
         // Update other fields if provided
@@ -70,6 +80,7 @@ exports.UpdateOfferBanner = CatchAsync(async (req, res) => {
         return ApiResponse.error(res, "Failed to update banner", 500, error);
     }
 });
+
 
 // Delete Offer Banner
 exports.DeleteOfferBanner = CatchAsync(async (req, res) => {

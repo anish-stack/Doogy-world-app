@@ -5,10 +5,9 @@ dotenv.config();
 const cors = require('cors');
 const CookiesParser = require('cookie-parser');
 const connectDb = require('./config/db');
-const { sendMessage } = require('./utils/SendSms');
 const ApiRouter = require('./routes/Auth.routes');
 const ProductsRouter = require('./routes/Products.routes');
-
+const DoctorRouter = require('./routes/Doctor.routes');
 
 const PORT = process.env.PORT || 4000;
 
@@ -30,6 +29,8 @@ app.get('/', (req, res) => {
 // Dynamic Routes For User
 app.use('/api/v1/auth', ApiRouter)
 app.use('/api/v1/Product', ProductsRouter)
+app.use('/api/v1/Doctors', DoctorRouter)
+
 
 
 // Handle unhandled error rejections

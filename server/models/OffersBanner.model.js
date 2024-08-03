@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const OfferBannerSchema = new mongoose.Schema({
-    Image: {
+    Image: [{
         url: {
             type: String
         },
@@ -9,7 +9,7 @@ const OfferBannerSchema = new mongoose.Schema({
             type: String
 
         }
-    },
+    }],
     RedirectAt: {
         type: String
     },
