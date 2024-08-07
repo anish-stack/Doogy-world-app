@@ -1,6 +1,22 @@
 const mongoose = require('mongoose');
 
 const ClinicSchema = new mongoose.Schema({
+    RepresentedPersonName: {
+        type: String,
+        trim: true,
+        required: [true, "Please Enter A Name"]
+    },
+    RepresentedPersonContactNumber: {
+        type: Number,
+        trim: true,
+        required: [true, "Please Enter Valid Contact Number"]
+    },
+    RepresentedEmail: {
+        type: String,
+        unique: true,
+        trim: true,
+        required: [true, "Please Enter Valid Email id"]
+    },
     Images: [
         {
             url: {
@@ -43,27 +59,30 @@ const ClinicSchema = new mongoose.Schema({
         type: Number,
         required: [true, "Please provide the latitude"]
     },
-    Address: {
-        OfficeNo: {
-            type: String,
-            required: [true, "Please provide the office number"]
-        },
-        Landmark: {
-            type: String,
-            required: [true, "Please provide the landmark"]
-        },
-        streetAddress: {
-            type: String,
-            required: [true, "Please provide the street address"]
-        }
+    Ratings: {
+        type: Number,
+        default: "0"
     },
+    OfficeNo: {
+        type: String,
+        required: [true, "Please provide the office number"]
+    },
+    Landmark: {
+        type: String,
+        required: [true, "Please provide the landmark"]
+    },
+    streetAddress: {
+        type: String,
+        required: [true, "Please provide the street address"]
+    },
+    
     MapLocation: {
         type: String,
         required: [true, "Please provide the map location URL"]
     },
-    isSundayOff:{
+    isSundayOff: {
         type: Boolean,
-        default:true,
+        default: true,
     }
 
 }, { timestamps: true });

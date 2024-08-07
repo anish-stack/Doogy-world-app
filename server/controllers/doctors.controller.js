@@ -74,7 +74,7 @@ exports.CreateDoctor = CatchAsync(async (req, res) => {
 exports.UpdateDoctor = CatchAsync(async (req, res) => {
     const { id } = req.params;
     const { Specialty, Gender, Experience, Name, Degree, ContactNumber, Email } = req.body;
-    console.log(req.body)
+    // console.log(req.body)
     const updatedFields = {
         Specialty,
         Experience,
@@ -84,7 +84,7 @@ exports.UpdateDoctor = CatchAsync(async (req, res) => {
         ContactNumber,
         Email
     };
-    console.log(updatedFields)
+    // console.log(updatedFields)
     try {
         // Update doctor record
         const updatedDoctor = await doctors.findByIdAndUpdate(id, updatedFields, { new: true });
@@ -120,7 +120,8 @@ exports.GetDoctor = CatchAsync(async (req, res) => {
         return ApiResponse.error(res, "Internal server error", 500);
     }
 });
-// Get Doctor
+
+// Get Single Doctor
 exports.GetSingleDoctor = CatchAsync(async (req, res) => {
     const { id } = req.params;
 
@@ -157,7 +158,6 @@ exports.DeleteDoctor = CatchAsync(async (req, res) => {
         return ApiResponse.error(res, "Internal server error", 500);
     }
 });
-
 
 //ToggleDoctor Available Status
 exports.ToggleDoctorStatus = CatchAsync(async (req, res) => {
