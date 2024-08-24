@@ -52,7 +52,7 @@ exports.CreateNewClinic = CatchAsync(async (req, res) => {
         // Check if Doctors' IDs are available
         for (let index = 0; index < Doctors.length; index++) {
             const element = Doctors[index];
-            const DoctorCheck = await Doctor.findById(element.id); // Corrected `Doctor.findById` for checking existence
+            const DoctorCheck = await doctors.findById(element.id); // Corrected `Doctor.findById` for checking existence
             if (!DoctorCheck) {
                 return res.status(400).json({
                     status: "false",
