@@ -1,11 +1,14 @@
 const Product = require('../models/Products.model');
-const UploadImage = require('../middlewares/CloudinaryUpload');
+const {uploadImage} = require('../middlewares/CloudinaryUpload');
 const CatchAsync = require('../middlewares/CatchAsync');
 const ApiResponse = require('../utils/ApiResponse');
 
 // Create Product
 exports.CreateProduct = CatchAsync(async (req, res) => {
     try {
+        console.log(req.files)
+        console.log(req.body)
+
         // Extract and validate image files
         const imageFiles = req.files;
         if (!imageFiles || imageFiles.length === 0) {
@@ -13,12 +16,12 @@ exports.CreateProduct = CatchAsync(async (req, res) => {
         }
 
         // Extract and validate product details from request body
-        const { ProductName, PackSizes, DetailsData, Category, BrandName, SuitedFor, Flavours, BreedSize, ItemForm, PetType } = req.body;
+        const { ProductName, PackSizes, DetailsDataL, Category, BrandName, SuitedFor, Flavours, BreedSize, ItemForm, PetType } = req.body;
 
         const missingFields = [];
         if (!ProductName) missingFields.push("ProductName");
         // if (!PackSizes) missingFields.push("PackSizes");
-        if (!DetailsData) missingFields.push("DetailsData");
+        // if (!DetailsData) missingFields.push("DetailsData");
         if (!Category) missingFields.push("Category");
         if (!BrandName) missingFields.push("BrandName");
         if (!SuitedFor) missingFields.push("SuitedFor");
@@ -32,13 +35,13 @@ exports.CreateProduct = CatchAsync(async (req, res) => {
         }
 
         // Upload images to Cloudinary
-        const imageUploadPromises = imageFiles.map(file => UploadImage(file));
+        const imageUploadPromises = imageFiles.map(file => uploadImage(file));
         const imageResults = await Promise.all(imageUploadPromises);
 
         const newProduct = new Product({
             ProductName,
             PackSizes,
-            DetailsData,
+            DetailsData:DetailsDataL,
             Category,
             BrandName,
             SuitedFor,
@@ -72,7 +75,7 @@ exports.CreateProduct = CatchAsync(async (req, res) => {
 
 exports.GetAllProducts = CatchAsync(async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().populate('Category');
         if (products.length === 0) {
             return res.status(403).json({
                 success: false,
@@ -121,7 +124,7 @@ exports.GetOnlyHaveProductsWhichIsNotOutStock = CatchAsync(async (req, res) => {
 
 exports.GetSingleProduct = CatchAsync(async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id).populate('Category');;
         if (!product) {
             return res.status(404).json({
                 success: false,

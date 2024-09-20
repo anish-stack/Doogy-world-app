@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const {CreateProduct,GetAllProducts,GetOnlyHaveProductsWhichIsNotOutStock,GetSingleProduct,ProductByCategories,GetProductsByFilters,deleteAllProducts,deleteProductById,deleteAllProductByCategory,UpdateProductWithImages} = require('../controllers/Products.controller');
-const {CreateOfferBanner,UpdateOfferBanner,DeleteOfferBanner,GetAllActiveBanners,DeleteAllBanners,ToggleActiveStatus} = require('../controllers/Banner.controller');
+const { CreateProduct, GetAllProducts, GetOnlyHaveProductsWhichIsNotOutStock, GetSingleProduct, ProductByCategories, GetProductsByFilters, deleteAllProducts, deleteProductById, deleteAllProductByCategory, UpdateProductWithImages } = require('../controllers/Products.controller');
+const { CreateOfferBanner, UpdateOfferBanner, DeleteOfferBanner, GetAllActiveBanners, DeleteAllBanners, ToggleActiveStatus } = require('../controllers/Banner.controller');
 const { getAllVouchers, applyVoucher, createVoucher, activateVoucher, deactivateVoucher, deleteVoucher } = require('../controllers/Vouchers.controller');
+const { CreateCategory, UpdateCategory, DeleteCategory, GetAllActiveCategory, DeleteAllCategory } = require('../controllers/category.controller');
 // Configure multer storage
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -38,7 +39,13 @@ router.put('/vouchers/activateVoucher/:id', activateVoucher)
 router.put('/vouchers/deactivateVoucher/:id', deactivateVoucher)
 router.delete('/vouchers/deleteVoucher/:id', deleteVoucher)
 
+// ====================Category====================================//
 
+router.post('/create-category', upload.array('images'), CreateCategory)
+router.post('/update-category/:id', upload.array('images'), UpdateCategory)
+router.delete('/Delete-category/:id', DeleteCategory);
+router.get('/Get-All-category', GetAllActiveCategory);
+router.delete('/Delete-All-category', DeleteAllCategory);
 
 
 

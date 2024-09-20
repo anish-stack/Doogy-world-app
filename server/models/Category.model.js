@@ -15,6 +15,10 @@ const CategorySchema = new mongoose.Schema({
             type: String,
             required: [true, "Please provide the public ID"]
         }
+    },
+    isActive:{
+        type:Boolean,
+        default:false
     }
 }, { timestamps: true });
 

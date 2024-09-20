@@ -11,8 +11,7 @@ const SizesSchema = new mongoose.Schema({
     },
     DiscountPrize: {
         type: Number,
-        min: 0,
-        max: 100,
+      
         required: [true, "Please provide the Discount Price"]
     },
     SizeStock: {
@@ -39,14 +38,15 @@ const ProductSchema = new mongoose.Schema({
     },
     PackSizes: {
         type: [SizesSchema],
-        // required: [true, "Please provide the pack sizes"]
+      
     },
     DetailsData: {
         type: String,
         required: [true, "Please provide product details"]
     },
     Category: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Category',
         required: [true, "Please provide the product category"]
     },
     BrandName: {
@@ -65,7 +65,7 @@ const ProductSchema = new mongoose.Schema({
     },
     BreedSize: {
         type: String,
-        required: [true, "Please provide the breed size"]
+        // required: [true, "Please provide the breed size"]
     },
     ItemForm: {
         type: String

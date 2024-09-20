@@ -9,10 +9,6 @@ const ExtraThingSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    ItemForm: {
-        type: String,
-        trim: true
-    },
     Flavours: {
         type: String,
         trim: true
