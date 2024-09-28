@@ -57,36 +57,7 @@ const Header = () => {
                     </div>
                     <div className="nav-right">
                         <ul className="header-right">
-                            <li className="custom-dropdown">
-                                <div className="translate_wrapper">
-                                    <div className="current_lang">
-                                        <Link className="lang" to="#" data-action="change-language">
-                                            <i className="flag-icon flag-icon-us"></i>
-                                            <h6 className="lang-txt f-w-700">ENG</h6>
-                                        </Link>
-                                    </div>
-                                    <ul className="custom-menu profile-menu language-menu py-0 more_lang">
-                                        <li className="d-block">
-                                            <Link className="lang" to="#" data-value="English">
-                                                <i className="flag-icon flag-icon-us"></i>
-                                                <div className="lang-txt">English</div>
-                                            </Link>
-                                        </li>
-                                        <li className="d-block">
-                                            <Link className="lang" to="#" data-value="fr">
-                                                <i className="flag-icon flag-icon-fr"></i>
-                                                <div className="lang-txt">Français</div>
-                                            </Link>
-                                        </li>
-                                        <li className="d-block">
-                                            <Link className="lang" to="#" data-value="es">
-                                                <i className="flag-icon flag-icon-es"></i>
-                                                <div className="lang-txt">Español</div>
-                                            </Link>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
+                        
                             <li className="search d-lg-none d-flex">
                                 <Link to="#" data-action="toggle-search">
                                     <svg>
